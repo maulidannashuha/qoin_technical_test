@@ -70,13 +70,13 @@ func main() {
 	for z:=0 ; stillPlay(players); z++ {
 		fmt.Println("Giliran", (z+1), "lempar dadu:")
 
+		var appendToPlayers = make([][]int, playerCount)
 		for i := range players {
 			for j := range players[i] {
 				players[i][j] = rand.Intn(6) + 1
 			}
 
 			fmt.Printf("\tPemain #%d (%d): %s \n", i+1, playerScores[i], printDice(players[i]))
-
 			for j:=0; j<len(players[i]); j++  {
 				if players[i][j] == 6 {
 					playerScores[i]++
@@ -92,8 +92,8 @@ func main() {
 					if nextPlayer == playerCount{
 						nextPlayer = 0
 					}
-
-					players[nextPlayer] = append(players[nextPlayer], 1)
+					
+					appendToPlayers[nextPlayer] = append(appendToPlayers[nextPlayer], 1)
 					players[i] = removeItem(players[i], j)
 				}
 			}
@@ -101,6 +101,10 @@ func main() {
 
 		fmt.Println("Setelah evaluasi:")
 		for i:= range players{
+			for j:= range appendToPlayers[i]{
+				players[i] = append(players[i], appendToPlayers[i][j])
+			}
+
 			fmt.Printf("\tPemain #%d (%d): %s \n", i+1, playerScores[i], printDice(players[i]))
 		}
 		fmt.Println("==================")
