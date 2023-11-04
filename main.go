@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"strconv"
 )
 
 func stillPlay(players [][]int) bool {
@@ -19,6 +20,24 @@ func stillPlay(players [][]int) bool {
 
 func removeItem(array []int, index int) []int {
 	return append(array[:index], array[index+1:]...)
+}
+
+func printDice(dices []int) string{
+	diceString := ""
+
+	for i := range dices {
+		if i != 0 {
+			diceString += " "
+		}
+
+		diceString += strconv.Itoa(dices[i])
+
+		if(i < len(dices) - 1) {
+			diceString += ","
+		}
+	}
+
+	return diceString
 }
 
 func main() {
@@ -56,7 +75,7 @@ func main() {
 				players[i][j] = rand.Intn(6) + 1
 			}
 
-			fmt.Printf("\tPemain #%d (%d): %d \n", i+1, playerScores[i], players[i])
+			fmt.Printf("\tPemain #%d (%d): %s \n", i+1, playerScores[i], printDice(players[i]))
 
 			for j:=0; j<len(players[i]); j++  {
 				if players[i][j] == 6 {
@@ -82,7 +101,7 @@ func main() {
 
 		fmt.Println("Setelah evaluasi:")
 		for i:= range players{
-			fmt.Printf("\tPemain #%d (%d): %d \n", i+1, playerScores[i], players[i])
+			fmt.Printf("\tPemain #%d (%d): %s \n", i+1, playerScores[i], printDice(players[i]))
 		}
 		fmt.Println("==================")
 	}
