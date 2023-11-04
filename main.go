@@ -7,7 +7,18 @@ import (
 )
 
 func stillPlay(players [][]int) bool {
-	return true;
+	stillHaveDice := 0
+	for i := range players {
+		if len(players[i]) > 0 {
+			stillHaveDice++
+		}
+	}
+
+	return stillHaveDice > 1;
+}
+
+func removeItem(array []int, index int) []int {
+	return append(array[:index], array[index+1:]...)
 }
 
 func main() {
@@ -36,6 +47,7 @@ func main() {
 		playerScores[i] = 0
 	}
 
+	fmt.Println("==================")
 	for z:=0 ; stillPlay(players); z++ {
 		fmt.Println("Giliran", (z+1), "lempar dadu:")
 
@@ -44,18 +56,34 @@ func main() {
 				players[i][j] = rand.Intn(6) + 1
 			}
 
-			fmt.Printf("\tPemain #%d (%d)\n", i+1, playerScores[i])
+			fmt.Printf("\tPemain #%d (%d): %d \n", i+1, playerScores[i], players[i])
 
-			for j := range players[i] {
+			for j:=0; j<len(players[i]); j++  {
 				if players[i][j] == 6 {
-					
+					playerScores[i]++
+
+					if j < 0 || j >= len(players[i]) {
+						players[i] = []int{}
+					}else{
+						players[i] = removeItem(players[i], j)
+					}
+					j--
+				}else if players[i][j] == 1 {
+					nextPlayer := i+1
+					if nextPlayer == playerCount{
+						nextPlayer = 0
+					}
+
+					players[nextPlayer] = append(players[nextPlayer], 1)
+					players[i] = removeItem(players[i], j)
 				}
 			}
 		}
+
+		fmt.Println("Setelah evaluasi:")
+		for i:= range players{
+			fmt.Printf("\tPemain #%d (%d): %d \n", i+1, playerScores[i], players[i])
+		}
+		fmt.Println("==================")
 	}
-
-	// while stillPlay(players) {
-	// 	fmt.Println("==================")
-	// }
-
 }
